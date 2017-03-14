@@ -1,0 +1,28 @@
+{
+  "name": "caherrera/pdfinfo",
+  "type": "library",
+  "keywords": ["pdf","pdfinfo"],
+  "homepage": "https://github.com/caherrera/pdfinfo",
+  "description": "Parse pdfinfo from shell to php 5.6+",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Carlos Herrera",
+      "email" : "carlos.herrera@fusepartners.com.au"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-0": {
+      "PdfInfo": "src/PdfInfo"
+    }
+  },
+  "autoload-dev": {
+    "psr-0": { "Test\\PdfInfo": "tests/PdfInfo" }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.*"
+  }
+}
