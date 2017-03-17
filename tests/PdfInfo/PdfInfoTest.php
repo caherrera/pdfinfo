@@ -27,7 +27,7 @@ class PdfInfoTest extends PHPUnit_Framework_TestCase
     }
 
     function testFile2() {
-        $p = new PdfInfo(__DIR__.'/../../example/SampleQuestions.pdf');
+        $p = new PdfInfo(__DIR__ . '/../../example/Sample Questions.pdf');
         $this->isInstanceOf('PdfInfo',$p);
         $this->isInstanceOf('PdfInfoBox',$p->cropBox);
         $this->assertEquals(612,$p->cropBox->right);

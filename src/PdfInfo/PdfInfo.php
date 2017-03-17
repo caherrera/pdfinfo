@@ -19,10 +19,10 @@ class PdfInfo
     public $suspects = '';
     public $form = '';
     public $javascript = '';
-    public $pages = '';
+    public $pages = 0;
     public $encrypted = '';
-    public $pageSize = '';
-    public $pageRot = '';
+    public $pageSize = 0;
+    public $pageRot = 0;
 
     /**
      * @var PdfInfoBox
@@ -103,7 +103,7 @@ class PdfInfo
 
     private function pdfInfo()
     {
-        $getPdfInfo = $this->bin . " -box " . $this->filePath;
+        $getPdfInfo = sprintf("%s -box '%s'",$this->bin,$this->filePath);
 
         try {
             exec($getPdfInfo, $pdfInfos);
@@ -120,6 +120,10 @@ class PdfInfo
 
                             $this->$key = new PdfInfoBox($match[2]);
 
+                            break;
+                        case 'File size':
+                            preg_match('/(\d+)\s.*/',$match[2],$size);
+                            $this->$key = $size[1];
                             break;
                         default:
                             $this->$key = $match[2];
