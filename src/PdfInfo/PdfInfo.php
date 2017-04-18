@@ -8,21 +8,21 @@
  */
 class PdfInfo
 {
-    public $title = '';
-    public $author = '';
-    public $creator = '';
-    public $producer = '';
-    public $creationDate = '';
-    public $modDate = '';
-    public $tagged = '';
+    public $title          = '';
+    public $author         = '';
+    public $creator        = '';
+    public $producer       = '';
+    public $creationDate   = '';
+    public $modDate        = '';
+    public $tagged         = '';
     public $userProperties = '';
-    public $suspects = '';
-    public $form = '';
-    public $javascript = '';
-    public $pages = 0;
-    public $encrypted = '';
-    public $pageSize = 0;
-    public $pageRot = 0;
+    public $suspects       = '';
+    public $form           = '';
+    public $javascript     = '';
+    public $pages          = 0;
+    public $encrypted      = '';
+    public $pageSize       = 0;
+    public $pageRot        = 0;
 
     /**
      * @var PdfInfoBox
@@ -44,41 +44,42 @@ class PdfInfo
      * @var PdfInfoBox
      */
     public $artBox;
-    public $fileSize = '';
-    public $optimized = '';
+    public $fileSize   = '';
+    public $optimized  = '';
     public $pdfVersion = '';
 
-    private $bin = '';
+    private $bin      = '';
     private $filePath = '';
 
     private $map = [
-        'Title' => 'title',
-        'Author' => 'author',
-        'Creator' => 'creator',
-        'Producer' => 'producer',
-        'CreationDate' => 'creationDate',
-        'ModDate' => 'modDate',
-        'Tagged' => 'tagged',
+        'Title'          => 'title',
+        'Author'         => 'author',
+        'Creator'        => 'creator',
+        'Producer'       => 'producer',
+        'CreationDate'   => 'creationDate',
+        'ModDate'        => 'modDate',
+        'Tagged'         => 'tagged',
         'UserProperties' => 'userProperties',
-        'Suspects' => 'suspects',
-        'Form' => 'form',
-        'JavaScript' => 'javascript',
-        'Pages' => 'pages',
-        'Encrypted' => 'encrypted',
-        'Page size' => 'pageSize',
-        'Page rot' => 'pageRot',
-        'MediaBox' => 'mediaBox',
-        'CropBox' => 'cropBox',
-        'BleedBox' => 'bleedBox',
-        'TrimBox' => 'trimBox',
-        'ArtBox' => 'artBox',
-        'File size' => 'fileSize',
-        'Optimized' => 'optimized',
-        'PDF version' => 'pdfVersion',
+        'Suspects'       => 'suspects',
+        'Form'           => 'form',
+        'JavaScript'     => 'javascript',
+        'Pages'          => 'pages',
+        'Encrypted'      => 'encrypted',
+        'Page size'      => 'pageSize',
+        'Page rot'       => 'pageRot',
+        'MediaBox'       => 'mediaBox',
+        'CropBox'        => 'cropBox',
+        'BleedBox'       => 'bleedBox',
+        'TrimBox'        => 'trimBox',
+        'ArtBox'         => 'artBox',
+        'File size'      => 'fileSize',
+        'Optimized'      => 'optimized',
+        'PDF version'    => 'pdfVersion',
 
 
     ];
 
+    private $error = false;
 
     function __construct($filePath = '', $bin = '')
     {
@@ -100,10 +101,9 @@ class PdfInfo
 
     }
 
-
     private function pdfInfo()
     {
-        $getPdfInfo = sprintf("%s -box '%s'",$this->bin,$this->filePath);
+        $getPdfInfo = sprintf("%s -box '%s' 2>/dev/null", $this->bin, $this->filePath);
 
         try {
             exec($getPdfInfo, $pdfInfos);
@@ -122,7 +122,7 @@ class PdfInfo
 
                             break;
                         case 'File size':
-                            preg_match('/(\d+)\s.*/',$match[2],$size);
+                            preg_match('/(\d+)\s.*/', $match[2], $size);
                             $this->$key = $size[1];
                             break;
                         default:
@@ -130,19 +130,31 @@ class PdfInfo
                     }
                 }
 
+            } else {
+                $this->error = true;
             }
 
         } catch (Exception $e) {
+            $this->error = true;
+
             return null;
         }
 
     }
 
+    /**
+     * @return bool
+     */
+    public function isError()
+    {
+        return $this->error;
+    }
+
     function __set($name, $value)
     {
         if (isset($this->map[$name])) {
-            $key=$this->map[$name];
-            $this->$key=$value;
+            $key        = $this->map[$name];
+            $this->$key = $value;
         }
 
     }

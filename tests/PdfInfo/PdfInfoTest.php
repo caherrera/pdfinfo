@@ -21,6 +21,7 @@ class PdfInfoTest extends PHPUnit_Framework_TestCase
         $this->isInstanceOf('PdfInfoBox',$p->cropBox);
         $this->assertEquals(595.28,$p->cropBox->right);
         $this->assertEquals(1,$p->pages);
+        $this->assertFalse($p->isError());
 
 
 
@@ -32,6 +33,17 @@ class PdfInfoTest extends PHPUnit_Framework_TestCase
         $this->isInstanceOf('PdfInfoBox',$p->cropBox);
         $this->assertEquals(612,$p->cropBox->right);
         $this->assertEquals(32,$p->pages);
+        $this->assertFalse($p->isError());
+
+
+
+    }
+
+    function testFile3() {
+        $p = new PdfInfo(__DIR__ . '/../../example/corrupted.pdf');
+        $this->isInstanceOf('PdfInfo',$p);
+        $this->assertTrue($p->isError());
+
 
 
 
